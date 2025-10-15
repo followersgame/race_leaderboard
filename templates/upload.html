@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Upload CSV</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container small">
+    <h2>Upload CSV (admin)</h2>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="flashes">
+          {% for category, msg in messages %}
+            <li class="{{ category }}">{{ msg }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    <form method="post" enctype="multipart/form-data">
+      <label>Select CSV file
+        <input type="file" name="file" accept=".csv" required>
+      </label>
+      <button type="submit">Upload</button>
+    </form>
+    <p><a href="{{ url_for('index') }}">Back to leaderboard</a></p>
+  </div>
+</body>
+</html>

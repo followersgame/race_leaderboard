@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>D_Follower'S_Game — Leaderboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="title">D_Follower'S_Game</div>
+      <nav>
+        <a href="{{ url_for('index') }}">Home</a>
+        {% if session.get('logged_in') %}
+          <a href="{{ url_for('upload') }}">Upload</a>
+          <a href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+          <a href="{{ url_for('login') }}">Admin Login</a>
+        {% endif %}
+      </nav>
+    </header>
+
+    <main>
+      <div class="controls">
+        <div class="left">
+          <label>Day:
+            <select id="daySelect">
+              {% if days %}
+                {% for d in days %}
+                  <option value="{{ d }}" {% if d==selected_day %}selected{% endif %}>Day {{ d }}</option>
+                {% endfor %}
+              {% else %}
+                <option value="">No days yet</option>
+              {% endif %}
+            </select>
+          </label>
+        </div>
+        <div class="right">
+          <input id="searchBox" placeholder="Search username or full name...">
+        </div>
+      </div>
+
+      {% if data %}
+      <div class="table-wrap">
+        <table id="leaderboard">
+          <thead>
+            <tr>
+              <th data-key="rank" data-type="number">rank ▾</th>
+              <th data-key="username" data-type="string">username ▾</th>
+              <th data-key="full_name" data-type="string">full_name ▾</th>
+              <th data-key="finish_time_seconds" data-type="number">finish_time_seconds ▾</th>
+              <th data-key="finish_time_frames" data-type="number">finish_time_frames ▾</th>
+              <th data-key="lane_position" data-type="number">lane_position ▾</th>
+              <th data-key="medal" data-type="string">medal ▾</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for row in data %}
+            <tr>
+              <td data-key="rank" data-value="{{ row['rank'] }}">{{ row['rank'] }}</td>
+              <td data-key="username" data-value="{{ row['username'] }}">{{ row['username'] }}</td>
+              <td data-key="full_name" data-value="{{ row['full_name'] }}">{{ row['full_name'] }}</td>
+              <td data-key="finish_time_seconds" data-value="{{ row['finish_time_seconds'] }}">{{ row['finish_time_seconds'] }}</td>
+              <td data-key="finish_time_frames" data-value="{{ row['finish_time_frames'] }}">{{ row['finish_time_frames'] }}</td>
+              <td data-key="lane_position" data-value="{{ row['lane_position'] }}">{{ row['lane_position'] }}</td>
+              <td data-key="medal" data-value="{{ row['medal'] }}">{{ row['medal'] }}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <p class="hint">Click any column header to sort. Use the search box to filter names.</p>
+      {% else %}
+      <p>No data for the selected day yet. {% if session.get('logged_in') %}Upload a CSV on the Upload page.{% else %}Admin login to upload.{% endif %}</p>
+      {% endif %}
+    </main>
+  </div>
+  <script>
+    // day selector behavior: navigate to ?day=X
+    document.addEventListener('DOMContentLoaded', function(){
+      const sel = document.getElementById('daySelect');
+      if(sel){
+        sel.addEventListener('change', function(){
+          const v = sel.value;
+          if(v) window.location = '?day=' + encodeURIComponent(v);
+        });
+      }
+    });
+  </script>
+  <script src="{{ url_for('static', filename='sort_search.js') }}"></script>
+</body>
+</html>

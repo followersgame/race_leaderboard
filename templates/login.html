@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Login</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container small">
+    <h2>Admin Login</h2>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="flashes">
+          {% for category, msg in messages %}
+            <li class="{{ category }}">{{ msg }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    <form method="post">
+      <label>Username
+        <input name="username" required>
+      </label>
+      <label>Password
+        <input name="password" type="password" required>
+      </label>
+      <button type="submit">Login</button>
+    </form>
+    <p><a href="{{ url_for('index') }}">Back to leaderboard</a></p>
+  </div>
+</body>
+</html>
